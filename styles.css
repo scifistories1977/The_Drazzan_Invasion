@@ -31,4 +31,5 @@ body, html {
     background-color: red;
     color: white;
     border: none;
+    display: none; /* ✅ Hides the button */
 }

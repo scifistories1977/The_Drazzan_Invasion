@@ -1,6 +1,8 @@
 let gameOver = false; // ✅ Fix: Ensure this variable exists globally
 let score = 0; // ✅ Global variable to track score
 let asteroidIncreaseTimer = 0; // ✅ Fix: Declare variable
+const enemies = [];
+const enemyLasers = [];
 
 
 function update() {
@@ -28,13 +30,13 @@ function update() {
         asteroidIncreaseTimer = 0;
     }
 
-// 🚀 **Check Player-Asteroid Collisions with Buffer**
-for (let i = asteroids.length - 1; i >= 0; i--) {
-    if (checkCollision(player, asteroids[i], true)) { // ✅ Uses updated buffer logic
-        triggerGameOver(asteroids[i]);
-        return;
+    // 🚀 **Check Player-Asteroid Collisions with Buffer**
+    for (let i = asteroids.length - 1; i >= 0; i--) {
+        if (checkCollision(player, asteroids[i], true)) { // ✅ Uses updated buffer logic
+            triggerGameOver(asteroids[i]);
+            return;
+        }
     }
-}
 
     // 🚀 **Check for Laser-Asteroid Collisions**
     for (let i = lasers.length - 1; i >= 0; i--) {
@@ -54,6 +56,61 @@ for (let i = asteroids.length - 1; i >= 0; i--) {
         }
     }
 
+    if (enemies.length < 2 && Math.random() < 0.02) { // ✅ 2x chance to spawn an enemy
+        enemies.push(new Enemy());
+    }
+
+    // 🚀 **Move enemies and handle shooting**
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].move();
+    }
+
+    // 🚀 **Move enemy lasers**
+    for (let i = enemyLasers.length - 1; i >= 0; i--) {
+        enemyLasers[i].move();
+
+        // 🚀 **Check if enemy lasers hit the player (with shield system)**
+        if (checkCollision(enemyLasers[i], player, true)) { 
+            player.shield -= 25; // ✅ Reduce shield by 25% when hit
+
+            // 🚀 **If shield reaches 0, trigger game over**
+            if (player.shield <= 0) {
+                gameOver = true;
+                explosions.push(new Explosion(player.x, player.y)); // Explosion effect
+                setTimeout(() => {
+                    showScoreBoard();
+                }, 1000);
+                return;
+            }
+
+            enemyLasers.splice(i, 1); // ✅ Remove laser after hitting the player
+        }
+
+        // ✅ Remove enemy lasers if they move off-screen
+        if (enemyLasers[i].y > canvas.height) {
+            enemyLasers.splice(i, 1);
+        }
+    }
+
+
+    // 🚀 **Check for Player Laser - Enemy Collisions**
+    for (let i = lasers.length - 1; i >= 0; i--) {
+        for (let j = enemies.length - 1; j >= 0; j--) {
+            if (checkCollision(lasers[i], enemies[j], false)) { // ✅ Keep buffer at false for accuracy
+                enemies[j].health -= 1;
+                explosions.push(new Explosion(enemies[j].x, enemies[j].y, enemies[j].width, enemies[j].height)); // ✅ Explosion matches new size
+            
+                if (enemies[j].health <= 0) {
+                    enemies.splice(j, 1);
+                    score += 50;
+                }
+            
+                lasers.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     // Handle explosions
     for (let i = explosions.length - 1; i >= 0; i--) {
         explosions[i].update();
@@ -65,6 +122,7 @@ for (let i = asteroids.length - 1; i >= 0; i--) {
         spawnAsteroid();
     }
 }
+
 
 
 function draw() {
@@ -82,10 +140,34 @@ function draw() {
     // Draw Explosions
     explosions.forEach(explosion => explosion.draw(ctx));
 
-    // 🏆 **NEW: Display Score**
+    // 🚀 **Display Score**
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
-    ctx.fillText("Score: " + score, 20, 30);
+    ctx.fillText("Score: " + score, 20, 30); // ✅ Top-left corner
+
+    // 🚀 **Display Shield Percentage**
+    ctx.fillText("Shield: " + player.shield + "%", 20, 60); // ✅ Below the score
+
+    // 🚀 **Draw Shield Bar**
+    const shieldWidth = 150; // Width of the shield bar
+    const shieldHeight = 15; // Height of the shield bar
+    const shieldX = 20; // Position from left
+    const shieldY = 75; // Position from top
+
+    ctx.fillStyle = "gray"; // Background bar
+    ctx.fillRect(shieldX, shieldY, shieldWidth, shieldHeight);
+
+    ctx.fillStyle = "blue"; // Shield color
+    ctx.fillRect(shieldX, shieldY, (player.shield / 100) * shieldWidth, shieldHeight); // ✅ Shrinks as shield decreases
+
+    ctx.strokeStyle = "white"; // Border
+    ctx.strokeRect(shieldX, shieldY, shieldWidth, shieldHeight);
+
+    // 🚀 **Draw enemies**
+    enemies.forEach(enemy => enemy.draw(ctx));
+
+    // 🚀 **Draw enemy lasers**
+    enemyLasers.forEach(laser => laser.draw(ctx));
 }
 
 function gameLoop() {

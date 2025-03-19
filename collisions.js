@@ -5,8 +5,10 @@ function checkCollision(obj1, obj2, useBuffer = false) {
     if (useBuffer) {
         if (obj2.width >= 80) {
             buffer = Math.min(obj2.width, obj2.height) * 0.25; // ✅ 25% buffer for large asteroids
+        } else if (obj2 instanceof EnemyLaser) {
+            buffer = Math.min(obj2.width, obj2.height) * 0.4; // ✅ 40% buffer for enemy lasers (closer crossover)
         } else {
-            buffer = Math.min(obj2.width, obj2.height) * 0.15; // ✅ 15% buffer for small asteroids
+            buffer = Math.min(obj2.width, obj2.height) * 0.15; // ✅ 15% buffer for small asteroids & other objects
         }
     }
 

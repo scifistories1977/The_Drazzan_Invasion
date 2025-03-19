@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const shootButton = document.getElementById("shootButton");
 
     if (shootButton) {
-        shootButton.addEventListener("touchstart", shootLaser); // ✅ Fires laser on touch
+        shootButton.style.display = "none"; // ✅ Hides the button on load
+        //shootButton.addEventListener("touchstart", shootLaser); // ✅ Fires laser on touch
     }
 });

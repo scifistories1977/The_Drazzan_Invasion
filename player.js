@@ -1,17 +1,16 @@
 class Player {
     constructor() {
-        this.width = canvas.width * 0.06;
-        this.height = canvas.height * 0.06;
+        this.width = 60;
+        this.height = 60;
         this.x = canvas.width / 2 - this.width / 2;
-        this.y = canvas.height * 0.85;
+        this.y = canvas.height - 100;
         this.speed = CONFIG.playerSpeed;
         this.image = new Image();
         this.image.src = "assets/spaceship.png";
+        this.shield = 100; // ✅ Shield starts at 100%
     }
 
     move(keys) {
-        if (gameOver) return; // Stop player movement on game over
-    
         if (keys["ArrowLeft"] && this.x > 0) this.x -= this.speed;
         if (keys["ArrowRight"] && this.x < canvas.width - this.width) this.x += this.speed;
         if (keys["ArrowUp"] && this.y > 0) this.y -= this.speed;
