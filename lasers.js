@@ -1,10 +1,10 @@
 class Laser {
-    constructor(x, y) {
+    constructor(x, y, width = 4, height = 15) { // ✅ Default values
         this.x = x;
         this.y = y;
-        this.width = 4;
-        this.height = 15;
-        this.speed = CONFIG.laserSpeed;
+        this.width = width;
+        this.height = height;
+        this.speed = 7;
     }
 
     move() {
@@ -16,6 +16,7 @@ class Laser {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
+
 
 const lasers = [];
 function shootLaser() {

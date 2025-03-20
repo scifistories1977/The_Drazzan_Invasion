@@ -1,4 +1,8 @@
 const keys = {}; // ✅ Declare keys globally
+const laserWidth = 4; // ✅ Default laser width
+const laserSound = new Audio("assets/laser1.mp3"); // ✅ Ensure correct file path
+laserSound.volume = 0.1; // ✅ Lower volume to avoid being too loud
+
 
 // 🚀 **Touch Controls for Movement**
 document.addEventListener("touchstart", handleTouch);
@@ -43,9 +47,24 @@ document.addEventListener("keyup", (event) => {
     keys[event.key] = false;
 });
 
-// 🚀 **Shooting Function (Used by Both Keyboard & Mobile)**
 function shootLaser() {
-    lasers.push(new Laser(player.x + player.width / 2, player.y)); // ✅ Uses Laser class from lasers.js
+    if (!gameOver) {
+        if (doubleFire) {
+            console.log("✅ Firing DOUBLE lasers!"); // ✅ Debugging
+            lasers.push(new Laser(player.x + player.width * 0.2, player.y, laserWidth));
+            lasers.push(new Laser(player.x + player.width * 0.8 - laserWidth, player.y, laserWidth));
+        } else {
+            console.log("❌ Firing SINGLE laser. Double Fire:", doubleFire); // ✅ Debugging
+            lasers.push(new Laser(player.x + player.width / 2 - laserWidth / 2, player.y, laserWidth));
+        }
+
+        // 🚀 **Play Laser Sound**
+        laserSound.currentTime = 0; // ✅ Rewinds to start for rapid fire
+        laserSound.play().catch(error => console.log("❌ Laser sound error:", error));
+
+    } else {
+        console.log("❌ Cannot shoot - Game Over");
+    }
 }
 
 

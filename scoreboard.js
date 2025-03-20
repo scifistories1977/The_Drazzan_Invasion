@@ -12,8 +12,35 @@ function showScoreBoard() {
     scoreBoard.style.textAlign = 'center';
     scoreBoard.style.borderRadius = '10px';
 
-    scoreBoard.innerHTML = '<h2>Game Over</h2>';
-    scoreBoard.innerHTML += `<p>Final Score: ${score}</p>`;
+    // 🚀 **Random Ending Messages**
+    const endingMessages = [
+        `"The Black Ship: The Drazzan Attacks"`,
+        `"Clara shakes her head... 'Really? That was your best effort?' 🤦"`,
+        `"Redford sighs: 'I knew you weren't ready yet, but I let you fly anyway.' 😔"`,
+        `"A Drazzan transmission crackles: 'That was pathetic, human! Try again if you dare!' 💀"`,
+        `"Your flight instructor would be embarrassed right now. 🛑"`,
+        `"The Drazzan fleet celebrates your destruction. They call you ‘The Easiest Target’! 🎯"`,
+        `"Clara radios in: 'Next time, maybe try dodging, Wyatt!' 😏"`,
+        `"Redford mutters: 'Guess we better start looking for a new hero...' 🙄"`,
+        `"Drazzan commander laughs: 'Is that all you’ve got, Earthling? Hah!' 😆"`,
+        `"Mission failed. The Drazzan remain undefeated... for now. 👽"`,
+    ];
+
+    // 🚀 **Pick a random message**
+    const randomMessage = endingMessages[Math.floor(Math.random() * endingMessages.length)];
+
+    // 🚀 **Display the message on the game over screen**
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(randomMessage, canvas.width / 2, canvas.height / 2 + 50); // ✅ Displayed in the middle
+
+    // 🚀 **Display the Final Score & Message**
+    scoreBoard.innerHTML = `
+        <h2>Game Over</h2>
+        <p><strong>Final Score:</strong> ${score}</p>
+        <p style="font-style: italic; color: #ffcc00;">${randomMessage}</p> <!-- ✅ Message is now visible! -->
+    `;
 
     // Play Again button
     const restartButton = document.createElement('button');
@@ -27,6 +54,7 @@ function showScoreBoard() {
 
     scoreBoard.appendChild(restartButton);
     document.body.appendChild(scoreBoard);
+    scoreBoard.style.zIndex = "1000"; // ✅ Ensures it appears over the game without affecting UI
 }
 
 function saveScore(finalScore) {
