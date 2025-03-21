@@ -5,6 +5,8 @@ body, html {
     overflow: hidden;
     background-color: black;
     touch-action: none;
+    width: 100%;
+    height: 100%;
 }
 
 /* Center the button */
@@ -53,38 +55,17 @@ body, html {
 }
 
 /* 🚀 Start Button Adjustments */
-/* 🚀 Start Button Styling */
 #startButton {
     position: absolute;
-    top: 85%; /* ✅ Moves the button lower */
+    top: 80%; /* ✅ Places the button below the thumbnail */
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 15px 30px;
     font-size: 24px;
-    font-family: 'Orbitron', sans-serif;
     border-radius: 10px;
     cursor: pointer;
-    background-color: red;
+    background-color: #ff4500;
     color: white;
     border: none;
-    transition: 0.3s;
-}
-
-#startButton:hover {
-    background-color: darkred;
-}
-
-
-#gameTitle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 60px;
-    font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
-    color: #ffcc00; /* ✅ Sci-fi glowing yellow */
-    text-shadow: 4px 4px 10px rgba(255, 255, 0, 0.8);
-    text-align: center;
-    white-space: nowrap;
+    box-shadow: 0px 0px 10px rgba(255, 69, 0, 0.8);
 }

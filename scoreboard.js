@@ -1,6 +1,7 @@
 function showScoreBoard() {
-    const scoreBoard = document.createElement('div');
-    scoreBoard.style.position = 'absolute';
+    const scoreBoard = document.createElement('div'); // ✅ Create it FIRST
+
+    scoreBoard.style.position = 'fixed'; // ✅ Prevent layout shift
     scoreBoard.style.top = '50%';
     scoreBoard.style.left = '50%';
     scoreBoard.style.transform = 'translate(-50%, -50%)';
@@ -11,6 +12,10 @@ function showScoreBoard() {
     scoreBoard.style.fontSize = '18px';
     scoreBoard.style.textAlign = 'center';
     scoreBoard.style.borderRadius = '10px';
+    scoreBoard.style.zIndex = '1000';
+    scoreBoard.style.maxWidth = '90%'; // ✅ Prevent overflow
+    scoreBoard.style.boxSizing = 'border-box';
+    
 
     // 🚀 **Random Ending Messages**
     const endingMessages = [
@@ -33,24 +38,28 @@ function showScoreBoard() {
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(randomMessage, canvas.width / 2, canvas.height / 2 + 50); // ✅ Displayed in the middle
-
+    //ctx.fillText(randomMessage, canvas.width / 2, canvas.height / 2 + 50); // ✅ Displayed in the middle
+    ctx.textAlign = "left";      // ✅ Reset canvas alignment back to default
+    ctx.textBaseline = "top";    // ✅ Helps ensure vertical positioning stays stable
+    
     // 🚀 **Display the Final Score & Message**
     scoreBoard.innerHTML = `
         <h2>Game Over</h2>
         <p><strong>Final Score:</strong> ${score}</p>
         <p style="font-style: italic; color: #ffcc00;">${randomMessage}</p> <!-- ✅ Message is now visible! -->
     `;
-
     // Play Again button
     const restartButton = document.createElement('button');
     restartButton.innerText = 'Play Again';
+    restartButton.style.position = 'relative'; // ✅ Prevent layout reflow inside scoreBoard
     restartButton.style.marginTop = '15px';
     restartButton.style.padding = '10px 20px';
     restartButton.style.fontSize = '18px';
     restartButton.style.borderRadius = '5px';
     restartButton.style.cursor = 'pointer';
+    restartButton.style.zIndex = '1001'; // ✅ Keep it above just in case
     restartButton.onclick = resetGame;
+
 
     scoreBoard.appendChild(restartButton);
     document.body.appendChild(scoreBoard);
